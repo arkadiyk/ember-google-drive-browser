@@ -3,7 +3,19 @@ GoogDriveBrw = Ember.Application.create({
 });
 GoogDriveBrw.register('controller:folders', GoogDriveBrw.FoldersController, {singleton: false });
 
+GoogDriveUtils = {
+    CLIENT_ID: 'aaa',
+    SCOPES: 'bbb',
 
+    authorize: function(success_callback) {
+        var callback = function(auth_result) {
+            if (auth_result && !auth_result.error) {
+                success_callback(auth_result);
+            }
+        };
+        gapi.auth.authorize({'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': true}, callback);
+    }
+};
 
 // Routes
 GoogDriveBrw.router = GoogDriveBrw.Router.map(function(){
@@ -19,6 +31,7 @@ GoogDriveBrw.Router.reopen({
         if (!GoogDriveBrw.userProfile.get('loggedIn')) {
             $("#login_dialog").modal('show').one('click', "#login_btn", function(){
                 $("#login_dialog").modal('hide');
+
                 GoogDriveBrw.userProfile.set('loggedIn', true);
                 GoogDriveBrw.startRouting();
                 //setTimeout(function(){console.log('resetting'); window.location.reload()}, 10000)
