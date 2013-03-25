@@ -129,23 +129,3 @@ GoogDriveBrw.Drive = Ember.Object.extend({
     }
 });
 
-GoogDriveBrw.drive = GoogDriveBrw.Drive.create({});
-
-GoogDriveBrw.Folder = Ember.Object.extend({
-	isLoaded: false,
-	isLoading: false,
-	childFolders: [],
-	childFiles: [],
-
-    load: function() {
-        GoogDriveBrw.drive.loadSubFolders(this);
-    }
-});
-
-GoogDriveBrw.Folder.reopenClass({
-    find: function(folder_id) {
-        return GoogDriveBrw.drive.findFolder(folder_id);
-    }
-});
-
-GoogDriveBrw.File = Ember.Object.extend({});

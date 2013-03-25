@@ -100,6 +100,7 @@ GoogDriveBrw.ViewMode = Ember.Object.extend({
         return this.get('mode') === "grid"
     }.property('mode')
 });
+
 GoogDriveBrw.viewMode = GoogDriveBrw.ViewMode.create({
     mode: "list"
 });
@@ -107,22 +108,34 @@ GoogDriveBrw.ViewModeView =  Ember.View.extend({
     context: GoogDriveBrw.viewMode
 });
 
+
 GoogDriveBrw.userProfile = Ember.Object.create({
     loggedIn: false
 });
 
 
-//GoogDriveBrw.userProfile = Ember.Object.create({
-//    isAuthenticated: true
-//});
-//
-//GoogDriveBrw.IndexController =  Ember.ArrayController.extend({
-//    content: [GoogDriveBrw.userProfile],
-//    doLogin: function() {
-//        $('#login_dialog').modal('show');
-//    },
-//    doAuthenticate: function() {
-//
-//    }
-//});
-//
+/*
+ * models
+ */
+
+GoogDriveBrw.drive = GoogDriveBrw.Drive.create({});
+
+GoogDriveBrw.Folder = Ember.Object.extend({
+    isLoaded: false,
+    isLoading: false,
+    childFolders: [],
+    childFiles: [],
+
+    load: function() {
+        GoogDriveBrw.drive.loadSubFolders(this);
+    }
+});
+
+GoogDriveBrw.Folder.reopenClass({
+    find: function(folder_id) {
+        return GoogDriveBrw.drive.findFolder(folder_id);
+    }
+});
+
+GoogDriveBrw.File = Ember.Object.extend({});
+
