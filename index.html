@@ -61,6 +61,7 @@
       <p class="nav-header">My Drive</p>
   </div>
   <ul class="nav nav-list">
+    <li style="font-weight: bold">{{#with controller}} {{partial 'folder_title'}} {{/with}}</li>
     {{#if isLoaded}}
       {{control 'folders' childFolders}}
     {{else}}
@@ -74,7 +75,7 @@
   <li>
       <span>
         <i style="cursor:pointer" {{action doFlipExpand folder}} {{bindAttr class="folder.isExpanded:icon-folder-open:icon-folder-close"}}></i>
-        {{partial 'folder_title'}}
+        {{#with folder}} {{partial 'folder_title'}} {{/with}}
       </span>
   </li>
   {{#if folder.isExpanded}}
@@ -93,9 +94,9 @@
 
 <script type="text/x-handlebars" data-template-name="_folder_title">
   {{#if GoogDriveBrw.viewMode.isList}}
-    {{#linkTo 'files.list' folder}}{{folder.title}}{{/linkTo}}
+    {{#linkTo 'files.list' this}}{{title}}{{/linkTo}}
   {{else}}
-    {{#linkTo 'files.grid' folder}}{{folder.title}}{{/linkTo}}
+    {{#linkTo 'files.grid' this}}{{title}}{{/linkTo}}
   {{/if}}
 </script>
 
