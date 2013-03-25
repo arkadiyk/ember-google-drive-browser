@@ -1,7 +1,7 @@
 GoogDriveBrw = Ember.Application.create({
     LOG_TRANSITIONS: true
 });
-GoogDriveBrw.register('controller:folders', GoogDriveBrw.FoldersController, {singleton: false });
+GoogDriveBrw.register('controller:folder_tree', GoogDriveBrw.FoldersController, {singleton: false });
 
 // Routes
 GoogDriveBrw.router = GoogDriveBrw.Router.map(function(){
@@ -12,6 +12,7 @@ GoogDriveBrw.router = GoogDriveBrw.Router.map(function(){
         });
 	});
 });
+
 GoogDriveBrw.Router.reopen({
     startRouting: function() {
         if (!GoogDriveBrw.userProfile.get('loggedIn')) {
@@ -21,7 +22,6 @@ GoogDriveBrw.Router.reopen({
                     GoogDriveBrw.userProfile.set('loggedIn', true);
                     GoogDriveBrw.startRouting();
                 });
-                //setTimeout(function(){console.log('resetting'); window.location.reload()}, 10000)
             });
         } else {
             this._super();
@@ -31,13 +31,14 @@ GoogDriveBrw.Router.reopen({
 
 GoogDriveBrw.FolderRoute = Ember.Route.extend({
     model: function(param) {
+        console.log('kkk', param);
         var id = param.folder_id ? param.folder_id : 'root' // todo: move it into Folder.find() ?
-        return  GoogDriveBrw.Folder.find(id)
+        return GoogDriveBrw.Folder.find(id);
     }
 });
 GoogDriveBrw.FilesRoute = Ember.Route.extend({
-    setupController: function(controller){
-        var folder = this.modelFor('files');
+    setupController: function(controller, folder){
+        console.log('fff', controller, folder);
         folder.load();
         controller.set('content', folder);
         GoogDriveBrw.viewMode.set('folder',folder);
@@ -61,10 +62,9 @@ GoogDriveBrw.FilesGridRoute = Ember.Route.extend({
     }
 });
 
-GoogDriveBrw.FoldersController = Ember.ArrayController.extend({
-    content: [],
-	doFlipExpand: function(folder) {
-		folder.set('isExpanded', !folder.get('isExpanded'));
+GoogDriveBrw.FolderTreeController = Ember.ObjectController.extend({
+ 	doFlipExpand: function(folder) {
+ 		this.set('isExpanded', !this.get('isExpanded'));
         folder.load();
 	}
 });

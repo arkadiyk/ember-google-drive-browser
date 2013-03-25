@@ -48,6 +48,7 @@ GoogDriveBrw.Drive = Ember.Object.extend({
             var that = this;
             var path_to_root = [];
             var finished_callback = function() {
+                console.log(path_to_root);
                 for(var i=path_to_root.length-1; i>=0; i--){
                     that.get('driveFolderObjectCache').get(path_to_root[i]).set('isExpanded',true);
                 }
