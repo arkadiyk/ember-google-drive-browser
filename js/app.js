@@ -118,8 +118,6 @@ GoogDriveBrw.userProfile = Ember.Object.create({
  * models
  */
 
-GoogDriveBrw.drive = GoogDriveBrw.Drive.create({});
-
 GoogDriveBrw.Folder = Ember.Object.extend({
     isLoaded: false,
     isLoading: false,

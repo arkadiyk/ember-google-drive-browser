@@ -128,4 +128,6 @@ GoogDriveBrw.Drive = Ember.Object.extend({
         return true;
     }
 });
+GoogDriveBrw.drive = GoogDriveBrw.Drive.create({});
+
 
