@@ -15,6 +15,7 @@
   </style>
 </head>
 <body>
+
 <script type="text/x-handlebars">
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
@@ -30,10 +31,7 @@
       </div>
     </div>
   </div>
-
-  {{#if isAuthenticated}}
-    {{render "login"}}
-  {{else}}
+  {{render "login"}}
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span3">
@@ -51,8 +49,8 @@
     <!--/row-->
   </div>
   <!--/.fluid-container-->
-  {{/if}}
 </script>
+
 <script type="text/x-handlebars" data-template-name="folder">
   <div>
       {{#render 'api-state'}}
@@ -70,6 +68,37 @@
     {{/if}}
   </ul>
 </script>
+
+<script type="text/x-handlebars" data-template-name="folders">
+  {{#each folder in controller}}
+  <li>
+      <span>
+        <i style="cursor:pointer" {{action doFlipExpand folder}} {{bindAttr class="folder.isExpanded:icon-folder-open:icon-folder-close"}}></i>
+        {{partial 'folder_title'}}
+      </span>
+  </li>
+  {{#if folder.isExpanded}}
+  <li>
+    <ul class="nav nav-list">
+      {{#if folder.isLoaded}}
+        {{control 'folders' folder.childFolders}}
+      {{else}}
+        {{#if folder.isLoading}}<li style="color:gray; font-size:smaller; margin-left:10px">Loading...</li>{{/if}}
+      {{/if}}
+    </ul>
+  </li>
+  {{/if}}
+  {{/each}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="_folder_title">
+  {{#if GoogDriveBrw.viewMode.isList}}
+    {{#linkTo 'files.list' folder}}{{folder.title}}{{/linkTo}}
+  {{else}}
+    {{#linkTo 'files.grid' folder}}{{folder.title}}{{/linkTo}}
+  {{/if}}
+</script>
+
 <script type="text/x-handlebars" data-template-name="file_list">
     {{render 'view-mode'}}
     <h3>{{title}}</h3>
@@ -83,6 +112,7 @@
       <span style="margin:15px">loading context..</span>
     {{/if}}
 </script>
+
 <script type="text/x-handlebars" data-template-name="_list">
   <table class="table table-striped table-condensed table-hover">
     <tr><th>id</th><th>title</th></tr>
@@ -91,6 +121,7 @@
     {{/each}}
   </table>
 </script>
+
 <script type="text/x-handlebars" data-template-name="_grid">
   <ul class="thumbnails">
     {{#each file in childFiles}}
@@ -103,31 +134,7 @@
     {{/each}}
   </ul>
 </script>
-<script type="text/x-handlebars" data-template-name="folders">
-  {{#each folder in controller}}
-    <li>
-      <span>
-        <i style="cursor:pointer" {{action doFlipExpand folder}} {{bindAttr class="folder.isExpanded:icon-folder-open:icon-folder-close"}}></i>
-        {{#if GoogDriveBrw.viewMode.isList}}
-          {{#linkTo 'files.list' folder}}{{folder.title}}{{/linkTo}}
-        {{else}}
-          {{#linkTo 'files.grid' folder}}{{folder.title}}{{/linkTo}}
-        {{/if}}
-      </span>
-    </li>
-    {{#if folder.isExpanded}}
-      <li>
-        <ul class="nav nav-list">
-          {{#if folder.isLoaded}}
-            {{control 'folders' folder.childFolders}}
-          {{else}}
-            {{#if folder.isLoading}}<li style="color:gray; font-size:smaller; margin-left:10px">Loading...</li>{{/if}}
-          {{/if}}
-        </ul>
-      </li>
-    {{/if}}
-  {{/each}}
-</script>
+
 <script type="text/x-handlebars" data-template-name="view-mode">
   <div class="pull-right">
     <div class="btn-group">

@@ -10,7 +10,7 @@ window.gapi = {
     },
 	client: {
         load: function(api_name, api_version, load_callback) {
-            setTimeout(load_callback, 1000)
+            setTimeout(load_callback, 1000);
         },
 		drive: {
 			files: {
