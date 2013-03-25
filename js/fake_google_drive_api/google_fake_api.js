@@ -1,13 +1,14 @@
 window.gapi = {
+    auth: {
+        authorize: function(params, callback) {
+            var result = {};
+            setTimeout(function() {
+                console.log('authorized!');
+                callback(result);
+            }, 1000);
+        }
+    },
 	client: {
-        auth: {
-            authorize: function(params, callback) {
-                var result = {};
-                setTimeout(function() {
-                    callback(result);
-                }, 1000);
-            }
-        },
 		drive: {
 			files: {
 				list: function(params) {

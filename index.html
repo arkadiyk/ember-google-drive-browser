@@ -151,8 +151,14 @@
 
 
 <script charset="utf-8" src="js/lib/jquery-1.9.1.js"></script>
-<script src="js/fake_google_drive_api/fixtures.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/fake_google_drive_api/google_fake_api.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- real thing -->
+<script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+
+<!-- Fake -->
+<!-- script src="js/fake_google_drive_api/fixtures.js" type="text/javascript" charset="utf-8"></script -->
+<!-- script src="js/fake_google_drive_api/google_fake_api.js" type="text/javascript" charset="utf-8"></script -->
+
 <script type="text/javascript">
   window.ENV = window.ENV || {};
   window.ENV["EXPERIMENTAL_CONTROL_HELPER"] = true;

@@ -67,8 +67,6 @@ GoogDriveBrw.Drive = Ember.Object.extend({
      */
     loadParents: function(current_folder, path_to_root, finished_callback) {
         var folder_id = current_folder.get('id');
-        var request = gapi.client.drive.parents.list({fileId: folder_id});
-
         var that = this;
         var get_parents = function(result_list) {
             if(result_list && result_list.items) {
@@ -86,8 +84,13 @@ GoogDriveBrw.Drive = Ember.Object.extend({
             }
             GoogDriveBrw.apiState.decrementProperty('activeCalls');
         };
+
         GoogDriveBrw.apiState.incrementProperty('activeCalls');
-        request(get_parents);
+
+        gapi.client.load('drive', 'v2', function() {
+            var request = gapi.client.drive.parents.list({fileId: folder_id});
+            request.execute(get_parents);
+        });
     },
 
     /**
@@ -100,7 +103,6 @@ GoogDriveBrw.Drive = Ember.Object.extend({
 
         folder.set('isLoading', true);
         var folder_id = folder.get('id');
-        var request = gapi.client.drive.files.list({q: "'" + folder_id + "' in parents"});
 
         var that = this;
         var populate_folder = function(result_list) {
@@ -122,10 +124,26 @@ GoogDriveBrw.Drive = Ember.Object.extend({
 
             GoogDriveBrw.apiState.decrementProperty('activeCalls');
         };
-
         GoogDriveBrw.apiState.incrementProperty('activeCalls');
-        request(populate_folder);
+
+        gapi.client.load('drive', 'v2', function() {
+            var request = gapi.client.drive.files.list({q: "'" + folder_id + "' in parents"});
+            request.execute(populate_folder);
+        });
+
         return true;
+    },
+
+    CLIENT_ID: '251650969875-cd1ubr5qmgjqh5hptugcql4cik570u6f.apps.googleusercontent.com',
+    SCOPES: 'https://www.googleapis.com/auth/drive.readonly',
+
+    authorize: function(success_callback) {
+        var callback = function(auth_result) {
+            if (auth_result && !auth_result.error) {
+                success_callback(auth_result);
+            }
+        };
+        gapi.auth.authorize({'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': false}, callback);
     }
 });
 GoogDriveBrw.drive = GoogDriveBrw.Drive.create({});
