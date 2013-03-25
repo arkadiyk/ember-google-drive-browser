@@ -30,10 +30,15 @@ GoogDriveBrw.Router.reopen({
 });
 
 GoogDriveBrw.FolderRoute = Ember.Route.extend({
+<<<<<<< HEAD
     model: function(param) {
         console.log('kkk', param);
         var id = param.folder_id ? param.folder_id : 'root' // todo: move it into Folder.find() ?
         return GoogDriveBrw.Folder.find(id);
+=======
+    model: function() {
+         return GoogDriveBrw.Folder.find('root');
+>>>>>>> gh-pages
     }
 });
 GoogDriveBrw.FilesRoute = Ember.Route.extend({

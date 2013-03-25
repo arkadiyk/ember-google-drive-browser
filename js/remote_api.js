@@ -34,7 +34,11 @@ GoogDriveBrw.Drive = Ember.Object.extend({
             folder = this.get('driveFolderObjectCache').get(id);
         } else if (id == 'root'){
             // Step 2. If root is requested and not yet in the cache, create it
+<<<<<<< HEAD
             folder = this.createFolder.call(this, {id: "root", title: "Root Folder"});
+=======
+            folder = this.createFolder.call(this, {id: "root", title: "Root Folder", isExpanded: true});
+>>>>>>> gh-pages
         } else {
             // Step 3. If direct folder URL hit - Try to get from Google Drive by id
             // Step 3.1 Create a folder. It will be returned right away coz all populate callbacks are async
