@@ -1,4 +1,3 @@
-
 GoogDriveBrw.Drive = Ember.Object.extend({
     driveFolderObjectCache: Ember.Object.create({}),
 
@@ -148,7 +147,7 @@ GoogDriveBrw.Drive = Ember.Object.extend({
                 GoogDriveBrw.drive.populateUserProfile();
             }
         };
-        gapi.auth.authorize({'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': true}, callback);
+        gapi.auth.authorize({'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': false}, callback);
     },
 
     populateUserProfile: function() {
