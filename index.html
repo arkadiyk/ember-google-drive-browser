@@ -26,7 +26,8 @@
             <img {{bindAttr src="user.picture.url"}} alt="" width="28" height="28">
           {{/view}}
         <ul class="nav">
-          <li><a href="#about">About</a></li>
+
+          <li><a href="#about" data-toggle="modal">About</a></li>
           <li><a href="https://github.com/arkadiyk/ember-google-drive-browser">Source</a></li>
         </ul>
       </div>
@@ -150,18 +151,40 @@
   </div>
 </script>
 
-  <div id="login_dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Please login" aria-hidden="true">
-    <div class="modal-header">
-      <h3>Login</h3>
-    </div>
-    <div class="modal-body">
-      <p>Please Login ...</p>
-    </div>
-    <div class="modal-footer">
-      <button id="login_btn" class="btn btn-primary">Login</button>
+<div id="login_dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Please login" aria-hidden="true">
+  <div class="modal-header">
+    <h3>Login</h3>
+  </div>
+  <div class="modal-body">
+    <p>Please Login ...</p>
+  </div>
+  <div class="modal-footer">
+    <button id="login_btn" class="btn btn-primary">Login</button>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div id="about" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Ember Google Drive Browser</h3>
+  </div>
+  <div class="modal-body">
+    <p style="margin: 50px 0">This is a simple application to browse your Google Drive files. Built entirely to learn Ember.js framework
+    and Google Drive API</p>
+    <hr>
+    <div class="muted" >
+      <small>
+        <p class="pull-right">Source code licenced under MIT license</p>
+        <p>&copy; Arkadiy Kraportov</p>
+      </small>
     </div>
   </div>
-
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
 
 <script charset="utf-8" src="js/lib/jquery-1.9.1.js"></script>
 

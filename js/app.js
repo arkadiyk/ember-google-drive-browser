@@ -6,7 +6,6 @@ GoogDriveBrw.register('controller:folder_tree', GoogDriveBrw.FoldersController, 
 // Routes
 GoogDriveBrw.router = GoogDriveBrw.Router.map(function(){
 	this.resource('folder', {path: '/'}, function(){
-//        this.route('about');
 		this.resource('files', {path: '/:folder_id'}, function(){
             this.route('list');
             this.route('grid');
