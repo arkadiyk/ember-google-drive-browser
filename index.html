@@ -21,12 +21,13 @@
     <div class="navbar-inner">
       <div class="container-fluid">
         <a class="brand" href="#">Google Drive Browser</a>
-        <p class="navbar-text pull-right">
-          Logged in as <a href="#" class="navbar-link">Username</a>
-        </p>
+          {{#view 'GoogDriveBrw.UserProfileView'}}
+            {{name}} &nbsp;
+            <img {{bindAttr src="user.picture.url"}} alt="" width="28" height="28">
+          {{/view}}
         <ul class="nav">
           <li><a href="#about">About</a></li>
-          <li><a href="#contact">Source</a></li>
+          <li><a href="https://github.com/arkadiyk/ember-google-drive-browser">Source</a></li>
         </ul>
       </div>
     </div>
@@ -116,9 +117,13 @@
 
 <script type="text/x-handlebars" data-template-name="_list">
   <table class="table table-striped table-condensed table-hover">
-    <tr><th>id</th><th>title</th></tr>
+    <tr><th>Title</th><th>Created</th><th>Size</th></tr>
     {{#each file in childFiles}}
-      <tr><td>{{file.id}}</td><td>{{file.title}}</td></tr>
+      <tr>
+        <td><img {{bindAttr src="file.iconLink"}}>&nbsp;{{file.title}}</td>
+        <td>{{file.formattedCreatedDate}}</td>
+        <td>{{file.formattedSize}}</td>
+      </tr>
     {{/each}}
   </table>
 </script>
@@ -128,7 +133,7 @@
     {{#each file in childFiles}}
       <li class="span3">
         <div class="thumbnail">
-          <img data-src="holder.js/300x200" alt="">
+          <img {{bindAttr src="file.thumbnailLink"}} alt="">
           <p>{{file.title}}</p>
         </div>
       </li>
@@ -162,11 +167,11 @@
 
 <!-- real thing -->
 
-<!--script type="text/javascript" src="https://apis.google.com/js/client.js"></script -->
+<script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
 
 <!-- Fake -->
-<script src="js/fake_google_drive_api/fixtures.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/fake_google_drive_api/google_fake_api.js" type="text/javascript" charset="utf-8"></script>
+<!-- script src="js/fake_google_drive_api/fixtures.js" type="text/javascript" charset="utf-8"></script -->
+<!-- script src="js/fake_google_drive_api/google_fake_api.js" type="text/javascript" charset="utf-8"></script -->
 
 <script type="text/javascript">
   window.ENV = window.ENV || {};

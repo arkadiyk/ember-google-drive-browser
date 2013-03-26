@@ -5,17 +5,32 @@ GoogDriveFixtures.file_list.root = {
         {
             "id": "abc1",
             "title": "PC010005.ORF",
-            "mimeType": "image/x-olympus-orf"
+            "mimeType": "image/x-olympus-orf",
+            "iconLink": "img/icon_11_image_list.png",
+            "thumbnailLink": "img/PC010005.ORF.jpg",
+            "createdDate": "2013-03-01T10:31:26.238Z",
+            "fileExtension": "orf",
+            "fileSize": "14988121"
         },
         {
             "id": "abc2",
             "title": "PC010003.ORF",
-            "mimeType": "image/x-olympus-orf"
+            "mimeType": "image/x-olympus-orf",
+            "iconLink": "img/icon_11_image_list.png",
+            "thumbnailLink": "img/PC010003.ORF.jpg",
+            "createdDate": "2013-03-21T10:31:26.238Z",
+            "fileExtension": "orf",
+            "fileSize": "12345567"
         },
         {
             "id": "abc3",
             "title": "Photo 2013-02-28 01.16.26 午後.png",
-            "mimeType": "image/png"
+            "mimeType": "image/png",
+            "iconLink": "img/icon_11_image_list.png",
+            "thumbnailLink": "img/p1.jpg",
+            "createdDate": "2013-12-01T10:31:26.238Z",
+            "fileExtension": "png",
+            "fileSize": "14988121"
         },
         {
             "id": "abc4",
@@ -28,7 +43,11 @@ GoogDriveFixtures.file_list.root = {
         {
             "id": "abc5",
             "title": "Team",
-            "mimeType": "application/vnd.google-apps.spreadsheet"
+            "mimeType": "application/vnd.google-apps.spreadsheet",
+            "iconLink": "img/icon_11_document_list.png",
+            "thumbnailLink": "img/p1.jpg",
+            "createdDate": "2013-12-01T10:31:26.238Z",
+            "fileSize": "14988121"
         },
         {
             "id": "abc6",
@@ -169,4 +188,12 @@ GoogDriveFixtures.parent_list.abc1Folder2 = {
         }
     ]
 };
-
+GoogDriveFixtures.about = {
+    "name": "The Best User Ever",
+    "user": {
+        "displayName": "The Best User Ever",
+        "picture": {
+            "url": "img/photo.jpg"
+        }
+    }
+};

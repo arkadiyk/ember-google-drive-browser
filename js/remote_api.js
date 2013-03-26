@@ -89,7 +89,8 @@ GoogDriveBrw.Drive = Ember.Object.extend({
         GoogDriveBrw.apiState.incrementProperty('activeCalls');
 
         gapi.client.load('drive', 'v2', function() {
-            var request = gapi.client.drive.parents.list({fileId: folder_id});
+            var fields = 'items(id,isRoot)';
+            var request = gapi.client.drive.parents.list({fileId: folder_id, fields: fields});
             request.execute(get_parents);
         });
     },
@@ -128,7 +129,9 @@ GoogDriveBrw.Drive = Ember.Object.extend({
         GoogDriveBrw.apiState.incrementProperty('activeCalls');
 
         gapi.client.load('drive', 'v2', function() {
-            var request = gapi.client.drive.files.list({q: "'" + folder_id + "' in parents"});
+            var query = "'" + folder_id + "' in parents";
+            var fields = "items(createdDate,description,fileExtension,fileSize,iconLink,id,imageMediaMetadata,indexableText,mimeType,thumbnailLink,title)";
+            var request = gapi.client.drive.files.list({q: query, fields: fields});
             request.execute(populate_folder);
         });
 
@@ -142,9 +145,22 @@ GoogDriveBrw.Drive = Ember.Object.extend({
         var callback = function(auth_result) {
             if (auth_result && !auth_result.error) {
                 success_callback(auth_result);
+                GoogDriveBrw.drive.populateUserProfile();
             }
         };
-        gapi.auth.authorize({'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': false}, callback);
+        gapi.auth.authorize({'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': true}, callback);
+    },
+
+    populateUserProfile: function() {
+        var populateProfile = function(result) {
+            console.log("populating profile with: ", result);
+            GoogDriveBrw.userProfile.setProperties(result);
+        }
+        gapi.client.load('drive', 'v2', function() {
+            var fields = "name,user";
+            var request = gapi.client.drive.about.get({fields: fields});
+            request.execute(populateProfile);
+        });
     }
 });
 GoogDriveBrw.drive = GoogDriveBrw.Drive.create({});

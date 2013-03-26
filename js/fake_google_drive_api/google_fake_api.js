@@ -13,6 +13,15 @@ window.gapi = {
             setTimeout(load_callback, 10);
         },
 		drive: {
+            about: {
+                get: function() {
+                    var result = GoogDriveFixtures.about;
+                    return {execute: function(callback) {
+                        console.log("calling about.get with ", result);
+                        setTimeout(function(){ callback(result) }, 300);
+                    }}
+                }
+            },
 			files: {
 				list: function(params) {
                     var folder_id = params.q.match(/'(.*)' in parents/)[1];

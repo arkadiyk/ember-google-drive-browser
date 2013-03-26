@@ -6,6 +6,7 @@ GoogDriveBrw.register('controller:folder_tree', GoogDriveBrw.FoldersController, 
 // Routes
 GoogDriveBrw.router = GoogDriveBrw.Router.map(function(){
 	this.resource('folder', {path: '/'}, function(){
+//        this.route('about');
 		this.resource('files', {path: '/:folder_id'}, function(){
             this.route('list');
             this.route('grid');
@@ -29,6 +30,8 @@ GoogDriveBrw.Router.reopen({
     }
 });
 
+
+
 GoogDriveBrw.FolderRoute = Ember.Route.extend({
     model: function() {
          return GoogDriveBrw.Folder.find('root');
@@ -36,7 +39,6 @@ GoogDriveBrw.FolderRoute = Ember.Route.extend({
 });
 GoogDriveBrw.FilesRoute = Ember.Route.extend({
     setupController: function(controller, folder){
-        console.log('fff', controller, folder);
         folder.load();
         controller.set('content', folder);
         GoogDriveBrw.viewMode.set('folder',folder);
@@ -97,6 +99,11 @@ GoogDriveBrw.ViewModeView =  Ember.View.extend({
 GoogDriveBrw.userProfile = Ember.Object.create({
     loggedIn: false
 });
+GoogDriveBrw.UserProfileView =  Ember.View.extend({
+    tagName: 'p',
+    classNames: ["navbar-text","pull-right"],
+    context: GoogDriveBrw.userProfile
+});
 
 
 /*
@@ -120,5 +127,25 @@ GoogDriveBrw.Folder.reopenClass({
     }
 });
 
-GoogDriveBrw.File = Ember.Object.extend({});
+GoogDriveBrw.File = Ember.Object.extend({
+    formattedCreatedDate: function() {
+        var cd = this.get('createdDate');
+        if (!cd) return '';
+        var d = new Date(cd);
+        return '' +
+            d.getFullYear() + '-' +
+            (d.getMonth() < 9 ? '0' : '') + (d.getMonth() + 1) + '-' +
+            (d.getDay() < 9 ? '0' : '') +  (d.getDay() + 1) + ' ' +
+            d.getHours() + ':' +
+            d.getMinutes() + ':' +
+            d.getSeconds();
+    }.property('createdDate'),
+    formattedSize: function() {
+        var bytes = this.get('fileSize');
+        if (!bytes) return '';
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    }.property('fileSize')
+});
 
