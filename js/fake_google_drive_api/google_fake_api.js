@@ -10,7 +10,7 @@ window.gapi = {
     },
 	client: {
         load: function(api_name, api_version, load_callback) {
-            setTimeout(load_callback, 10);
+            setTimeout(load_callback, 100);
         },
 		drive: {
             about: {
@@ -18,7 +18,7 @@ window.gapi = {
                     var result = GoogDriveFixtures.about;
                     return {execute: function(callback) {
                         console.log("calling about.get with ", result);
-                        setTimeout(function(){ callback(result) }, 300);
+                        setTimeout(function(){ callback(result) }, 700);
                     }}
                 }
             },
@@ -28,7 +28,7 @@ window.gapi = {
                     var result = GoogDriveFixtures.file_list[folder_id];
 					return {execute: function(callback) {
                         console.log("calling list with ", params, folder_id, result);
-						setTimeout(function(){ callback(result) }, 300);
+						setTimeout(function(){ callback(result) }, 700);
 					}}
 				}
 			},
@@ -38,7 +38,7 @@ window.gapi = {
                     var result = GoogDriveFixtures.parent_list[folder_id];
                     return {execute: function(callback) {
                         console.log("calling parents with ", params, folder_id, result);
-                        setTimeout(function(){ callback(result) }, 300);
+                        setTimeout(function(){ callback(result) }, 700);
                     }}
                 }
             }

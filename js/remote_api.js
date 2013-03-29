@@ -47,7 +47,6 @@ GoogDriveBrw.Drive = Ember.Object.extend({
             var that = this;
             var path_to_root = [];
             var finished_callback = function() {
-                console.log(path_to_root);
                 for(var i=path_to_root.length-1; i>=0; i--){
                     that.get('driveFolderObjectCache').get(path_to_root[i]).set('isExpanded',true);
                 }
@@ -77,14 +76,28 @@ GoogDriveBrw.Drive = Ember.Object.extend({
                         path_to_root.push(o.id);
                         that.loadParents(folder, path_to_root, finished_callback);
                     } else {
+                        // assuming root folder loads on app startup
                         path_to_root.push('root');
                         finished_callback();
                     }
                 });
+            } else if (result_list.error.code == 404) { // file not found
+                // URL pointed to invalid folder_id
+                if(!current_folder.get('isDestroyed')) {
+                    console.log("NO PARENTS! Destroy and delete the folder from cache..");
+                    that.get('driveFolderObjectCache').set(folder_id, null);
+                    current_folder.set('title','');
+                    current_folder.destroy();
+                }
+            } else if (result_list.error.code == 401) {
+                console.log('reathorizing parents:', result_list);
+                GoogDriveBrw.drive.authorize(function(){that.loadParents(current_folder, path_to_root, finished_callback)});
+            } else {
+                console.log('cannot get parents:', result_list);
+                alert('Cannot get file parents: ' + result_list.error.code + ' - ' + result_list.error.message);
             }
             GoogDriveBrw.apiState.decrementProperty('activeCalls');
         };
-
         GoogDriveBrw.apiState.incrementProperty('activeCalls');
 
         gapi.client.load('drive', 'v2', function() {
@@ -117,11 +130,25 @@ GoogDriveBrw.Drive = Ember.Object.extend({
                         files.pushObject(GoogDriveBrw.File.create(o));
                     }
                 });
+                folder.set('childFolders', folders);
+                folder.set('childFiles', files);
+                folder.set('isLoading', false);
+                folder.set('isLoaded', true);
+            } else if (result_list.error.code == 404) { // file not found
+                // URL pointed to invalid folder_id
+                if(!folder.get('isDestroyed')) {
+                    console.log("NO PARENTS! Destroy and delete the folder from cache..");
+                    that.get('driveFolderObjectCache').set(folder_id, null);
+                    folder.set('title','');
+                    folder.destroy();
+                }
+            } else if (result_list.error.code == 401) {
+                console.log('reathorizing list:', result_list);
+                GoogDriveBrw.drive.authorize(function(){that.loadSubFolders(folder)});
+            } else {
+                console.log('cannot get list:', result_list);
+                alert('Cannot get file list: ' + result_list.error.message);
             }
-            folder.set('childFolders', folders);
-            folder.set('childFiles', files);
-            folder.set('isLoading', false);
-            folder.set('isLoaded', true);
 
             GoogDriveBrw.apiState.decrementProperty('activeCalls');
         };
@@ -137,22 +164,30 @@ GoogDriveBrw.Drive = Ember.Object.extend({
         return true;
     },
 
-    CLIENT_ID: '251650969875-cd1ubr5qmgjqh5hptugcql4cik570u6f.apps.googleusercontent.com',
-    SCOPES: 'https://www.googleapis.com/auth/drive.readonly',
+    authorizeOnLoad: function(success_callback) {
+        if(!gapi || !gapi.auth) {
+            setTimeout(function(){ GoogDriveBrw.drive.authorizeOnLoad(success_callback) }, 36);
+        } else {
+            GoogDriveBrw.drive.authorize(success_callback);
+        }
+    },
 
     authorize: function(success_callback) {
+        var CLIENT_ID = '251650969875-cd1ubr5qmgjqh5hptugcql4cik570u6f.apps.googleusercontent.com';
+        var SCOPES = 'https://www.googleapis.com/auth/drive.readonly.metadata';
         var callback = function(auth_result) {
             if (auth_result && !auth_result.error) {
-                success_callback(auth_result);
                 GoogDriveBrw.drive.populateUserProfile();
+                if(success_callback){ success_callback(auth_result) }
+            } else {
+                gapi.auth.authorize({client_id: CLIENT_ID, scope: SCOPES, immediate: false}, callback);
             }
         };
-        gapi.auth.authorize({'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': false}, callback);
+        gapi.auth.authorize({client_id: CLIENT_ID, scope: SCOPES, immediate: true}, callback);
     },
 
     populateUserProfile: function() {
         var populateProfile = function(result) {
-            console.log("populating profile with: ", result);
             GoogDriveBrw.userProfile.setProperties(result);
         }
         gapi.client.load('drive', 'v2', function() {
